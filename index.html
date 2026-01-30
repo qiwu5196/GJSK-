@@ -1250,6 +1250,10 @@ main{ padding:0; }
 .metaReveal.is-in .ideaPill:nth-child(2){ transition-delay: 220ms; }
 .metaReveal.is-in .ideaPill:nth-child(3){ transition-delay: 440ms; }
 .metaReveal.is-in .ideaPill:nth-child(4){ transition-delay: 660ms; }
+/* ===== card reveal: Page2/4/6 boxes float ===== */
+.revealCard{opacity:0;transform:translateY(14px);transition:opacity 1.5s ease,transform 1.5s cubic-bezier(.2,.8,.2,1);will-change:transform,opacity;}
+.revealCard.is-in{opacity:1;transform:translateY(0);}
+
 
 .catCard{
   position: relative;
@@ -1978,22 +1982,63 @@ main{ padding:0; }
   });
 
 (function(){
-  const page3 = document.getElementById("page3");
-  const ideaBox = document.getElementById("ideaBox");
-  if (!page3 || !ideaBox) return;
+  function mkReveal(sectionId, itemSelector, step){
+    var section=document.getElementById(sectionId);
+    if(!section) return;
+    var items=[].slice.call(document.querySelectorAll(itemSelector));
+    if(!items.length) return;
 
-  const io = new IntersectionObserver((entries) => {
-    for (const ent of entries){
-      if (ent.isIntersecting){
-        ideaBox.classList.add("is-in");
-        io.disconnect();
-        break;
-      }
+    items.forEach(function(el){ el.classList.add('revealCard'); });
+
+    function reset(){
+      items.forEach(function(el){
+        el.classList.remove('is-in');
+        el.style.transitionDelay='0ms';
+      });
     }
-  }, { threshold: 0.25 });
+    function play(){
+      reset();
+      void items[0].offsetWidth; // 强制重算，让动画可重复触发
+      items.forEach(function(el,i){
+        el.style.transitionDelay=(i*(step||80))+'ms';
+      });
+      requestAnimationFrame(function(){
+        items.forEach(function(el){ el.classList.add('is-in'); });
+      });
+    }
 
-  io.observe(page3);
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting) play(); else reset();
+      });
+    },{threshold:0.25});
+    io.observe(section);
+  }
+
+  function mkMeta(sectionId, boxId){
+    var section=document.getElementById(sectionId);
+    var box=document.getElementById(boxId);
+    if(!section||!box) return;
+
+    function reset(){ box.classList.remove('is-in'); }
+    function play(){ box.classList.remove('is-in'); void box.offsetWidth; box.classList.add('is-in'); }
+
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if(e.isIntersecting) play(); else reset();
+      });
+    },{threshold:0.25});
+    io.observe(section);
+  }
+
+  mkReveal('page1','.page1 .photoFrame');
+  mkReveal('page2','.page2 .productCard',150);
+  mkMeta('page3','ideaBox');
+  mkReveal('page4','.page4 .catCard',150);
+  mkReveal('page5','.page5 .imageFrame');
+  mkReveal('page6','.page6 .readCard',150);
 })();
+
 
 
 </script>
