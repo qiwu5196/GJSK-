@@ -1313,6 +1313,36 @@ main{ padding:0; }
   .page5 .copy{ justify-self: start; max-width: none; }
 }
 
+/* === Mobile fix: Page 3 & Page 5 only show half === */
+@media (max-width: 860px){
+
+  /* Prevent horizontal overflow */
+  html, body { overflow-x: hidden; }
+
+  /* Page 3: force single column on mobile */
+  .page3 .split{
+    grid-template-columns: 1fr !important;
+    gap: 18px;
+  }
+
+  /* Page 5: force single column on mobile (page-specific split overrides global) */
+  .page5 .split{
+    grid-template-columns: 1fr !important;
+    gap: 18px;
+  }
+
+  /* Make media blocks not exceed viewport */
+  .page3 .media, .page5 .media,
+  .page3 .copy,  .page5 .copy{
+    min-width: 0;
+  }
+
+  /* Image frames: keep inside screen */
+  .page3 .imageFrame, .page5 .imageFrame{
+    width: 100%;
+    max-width: 100%;
+  }
+}
 
 </style>
 
@@ -1626,7 +1656,7 @@ main{ padding:0; }
     </div>
 
     <div class="footerBottom">
-      <div class="footerBrand">Brand Family</div>
+      <div class="footerBrand">观见时刻 Critical Moment</div>
       <div class="footerRight">© <span id="yearNow"></span> All rights reserved.</div>
     </div>
   </div>
