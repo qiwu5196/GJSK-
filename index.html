@@ -117,6 +117,148 @@
     filter:none;
     will-change:opacity;
   }
+  /* ===== Intro trace (silver line-draw before black logo) ===== */
+  .logoTraceLayer{
+    --lineIn: 400ms;     /* 左右银线汇合 */
+    --stemDur: 1ms;    /* 中心竖线扩展 */
+    --guideFade: 350ms;  /* 十字引导线淡出 */
+    --ringDur: 320ms;    /* 每一圈绘制 */
+    --ringGap: 55ms;     /* 圈与圈之间停顿 */
+    --traceFade: 700ms;  /* 整体淡出 */
+    --ringStartOffset: 50ms; /* 等竖线扩展完成后再开始画第一圈（避免十字线留在LOGO里） */
+    /* 总时长 = lineIn + ringStartOffset + ringDur*4 + ringGap*3 + traceFade */
+    --traceTotal: calc(var(--lineIn) + var(--ringStartOffset) + (var(--ringDur) * 4) + (var(--ringGap) * 3) + var(--traceFade));
+
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:0;
+    z-index:2;
+    filter:blur(0px);
+    will-change:opacity,filter;
+  }
+  .logoTraceLayer.run{ opacity:1; }
+
+  .traceLine{
+    position:absolute;
+    top:50%;
+    height:2px;
+    opacity:0.0;
+    transform:translateZ(0) scaleX(0);
+    will-change:transform,opacity;
+    background:linear-gradient(90deg,
+      rgba(255,255,255,0) 0%,
+      rgba(230,236,245,0.55) 18%,
+      rgba(255,255,255,0.95) 50%,
+      rgba(196,205,218,0.55) 82%,
+      rgba(255,255,255,0) 100%);
+    box-shadow:
+      0 0 10px rgba(230,236,245,0.35),
+      0 0 26px rgba(230,236,245,0.18);
+  }
+  .traceLine.left{ left:0; right:50%; transform-origin:0 50%; }
+  .traceLine.right{ left:50%; right:0; transform-origin:100% 50%; }
+
+  .traceStem{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:0px;
+    height:0;
+    transform:translate(-50%,-50%);
+    opacity:0.0;
+    will-change:height,opacity;
+    background:linear-gradient(180deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.85) 18%,
+      rgba(200,210,224,0.42) 52%,
+      rgba(255,255,255,0.85) 82%,
+      rgba(255,255,255,0) 100%);
+    box-shadow:
+      0 0 10px rgba(230,236,245,0.30),
+      0 0 24px rgba(230,236,245,0.14);
+  }
+
+  .logoTraceSvg{
+    position:absolute;
+    left:50%;
+    top:50%;
+    width:var(--logoSize);
+    height:var(--logoSize);
+    transform:translate(-50%,-50%);
+    overflow:visible;
+  }
+  .logoTraceSvg .ring{
+    fill:none;
+    stroke:url(#traceGrad);
+    stroke-width:3.5;
+    stroke-miterlimit:10;
+    stroke-linejoin:round;
+    stroke-linecap:round;
+    opacity:0.92;
+    filter:drop-shadow(0 0 12px rgba(230,236,245,0.20));
+    will-change:stroke-dashoffset,opacity;
+  }
+
+  @keyframes traceLineIn{
+    0%   {opacity:0; transform:translateZ(0) scaleX(0);}
+    20%  {opacity:1;}
+    100% {opacity:1; transform:translateZ(0) scaleX(1);}
+  }
+  @keyframes traceStemGrow{
+    0%   {opacity:0; height:0;}
+    15%  {opacity:1;}
+    100% {opacity:1; height:calc(var(--logoSize) - 10px);}
+  }
+  @keyframes traceGuideOut{
+    to{ opacity:0; }
+  }
+  @keyframes traceDraw{
+    to{ stroke-dashoffset:0; }
+  }
+  @keyframes traceLayerFade{
+    to{ opacity:0; filter:blur(1.5px); }
+  }
+
+  .logoTraceLayer.run .traceLine{
+    animation:
+      traceLineIn var(--lineIn) var(--ease) forwards,
+      traceGuideOut var(--guideFade) linear forwards;
+    animation-delay:
+      0ms,
+      var(--lineIn);
+  }
+  .logoTraceLayer.run .traceStem{
+    animation:
+      traceStemGrow var(--stemDur) var(--ease) forwards,
+      traceGuideOut var(--guideFade) linear forwards;
+    animation-delay:
+      var(--lineIn),
+      calc(var(--lineIn) + var(--stemDur) - var(--guideFade));
+  }
+
+  .logoTraceLayer.run .ring.r1{
+    animation: traceDraw var(--ringDur) linear forwards;
+    animation-delay: calc(var(--lineIn) + var(--ringStartOffset));
+  }
+  .logoTraceLayer.run .ring.r2{
+    animation: traceDraw var(--ringDur) linear forwards;
+    animation-delay: calc(var(--lineIn) + var(--ringStartOffset) + (var(--ringDur) + var(--ringGap)) * 1);
+  }
+  .logoTraceLayer.run .ring.r3{
+    animation: traceDraw var(--ringDur) linear forwards;
+    animation-delay: calc(var(--lineIn) + var(--ringStartOffset) + (var(--ringDur) + var(--ringGap)) * 2);
+  }
+  .logoTraceLayer.run .ring.r4{
+    animation: traceDraw var(--ringDur) linear forwards;
+    animation-delay: calc(var(--lineIn) + var(--ringStartOffset) + (var(--ringDur) + var(--ringGap)) * 3);
+  }
+
+  .logoTraceLayer.run{
+    animation: traceLayerFade var(--traceFade) var(--ease) forwards;
+    animation-delay: calc(var(--traceTotal) - var(--traceFade));
+  }
+
 
   /* Animation keyframes (tuned for continuity) */
   @keyframes whiteGlowExpand{
@@ -1358,6 +1500,30 @@ main{ padding:0; }
   <div class="layer whiteGlow" id="whiteGlow"></div>
   <div class="layer whiteFill" id="whiteFill"></div>
 
+  <div class="logoTraceLayer" id="logoTrace" aria-hidden="true">
+    <div class="traceLine left" aria-hidden="true"></div>
+    <div class="traceLine right" aria-hidden="true"></div>
+    <div class="traceStem" aria-hidden="true"></div>
+
+    <svg class="logoTraceSvg" id="logoTraceSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 264.32 251.38" aria-hidden="true">
+      <defs>
+        <linearGradient id="traceGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%"   stop-color="#f7f9fc" stop-opacity="0.92"/>
+          <stop offset="18%"  stop-color="#cfd6e0" stop-opacity="0.92"/>
+          <stop offset="52%"  stop-color="#ffffff" stop-opacity="0.92"/>
+          <stop offset="78%"  stop-color="#b7c0cc" stop-opacity="0.92"/>
+          <stop offset="100%" stop-color="#f7f9fc" stop-opacity="0.92"/>
+        </linearGradient>
+      </defs>
+
+      <!-- outer → inner -->
+      <polygon class="ring r1" points="33.74 160.56 33.74 212.3 82.95 248.05 132.16 232.06 181.37 248.05 230.58 212.3 230.58 160.56 260.99 118.7 242.19 60.85 192.98 44.86 162.57 3 101.74 3 71.33 44.86 22.12 60.85 3.33 118.7 33.74 160.56"/>
+      <polygon class="ring r2" points="44.61 120.53 57.4 81.16 90.63 70.36 111.17 42.09 153.14 42.09 173.68 70.36 206.91 81.16 219.88 121.08 199.35 149.35 199.35 184.28 165.39 208.96 132.16 198.16 98.93 208.96 98.46 208.62 64.97 184.28 64.97 149.35 44.43 121.08 44.61 120.53"/>
+      <polygon class="ring r3" points="91.49 101.19 109.48 95.35 120.59 80.05 143.73 80.05 154.84 95.35 172.83 101.19 179.98 123.2 168.86 138.49 168.86 157.4 150.14 171 132.16 165.16 114.18 171 95.46 157.4 95.46 138.49 84.34 123.2 91.49 101.19"/>
+      <polygon class="ring r4" points="121.17 113.7 143.15 113.7 149.93 134.61 132.16 147.52 114.38 134.58 121.17 113.7"/>
+    </svg>
+  </div>
+
   <div class="center blackMistLogo" id="blackMistLogo"></div>
   <div class="center logoBlack" id="logoBlack"></div>
 </section>
@@ -1674,6 +1840,8 @@ main{ padding:0; }
   const whiteFill = document.getElementById("whiteFill");
   const blackMistLogo = document.getElementById("blackMistLogo");
   const logoBlack = document.getElementById("logoBlack");
+  const logoTrace = document.getElementById("logoTrace");
+  const logoTraceSvg = document.getElementById("logoTraceSvg");
 
   // 预解码 Logo 遮罩，避免个别浏览器在遮罩未就绪时先绘制一帧“整屏变灰”。
   const maskReady = (() => {
@@ -1699,8 +1867,27 @@ main{ padding:0; }
 
   // 只要调这几个数字就能改节奏
   const glowDur = 2300;     // 白光扩张
+  // 与CSS里 Intro trace 的变量保持一致：lineIn(380) + ringStartOffset(240) + ringDur(260)*4 + ringGap(90)*3 + traceFade(240)
+  const traceTotalMs = 2170;
   const mistDur = 1550;     // 黑雾成标
   const logoFadeDur = 1650;  // 纯黑标淡入
+
+  // Intro trace: prepare SVG stroke-dash, then run
+  if (logoTraceSvg) {
+    const rings = Array.from(logoTraceSvg.querySelectorAll(".ring"));
+    rings.forEach((el) => {
+      try {
+        const len = el.getTotalLength();
+        el.style.strokeDasharray = `${len}`;
+        el.style.strokeDashoffset = `${len}`;
+      } catch (e) {}
+    });
+  }
+  // Start trace immediately (before black logo)
+  setTimeout(() => {
+    if (logoTrace) logoTrace.classList.add("run");
+  }, 0);
+
 
   // Stage 1
   whiteGlow.style.animation = `whiteGlowExpand ${glowDur}ms var(--ease) forwards`;
@@ -1708,7 +1895,7 @@ main{ padding:0; }
 
   // Stage 2: overlap for smoother continuity
   const mistStart = Math.floor(glowDur * 1);
-  const logoStart = Math.floor(glowDur * 0.70);
+  const logoStart = Math.max(Math.floor(glowDur * 0.80), traceTotalMs - 140);
 
   setTimeout(() => {
     maskReady.then(() => {
