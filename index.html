@@ -57,14 +57,14 @@
 
   /* White bloom outward */
   .whiteGlow{
-    inset:-30%;
+    inset:40%;
     background:radial-gradient(circle at 50% 50%,
       rgba(255,255,255,0.98) 0%,
       rgba(255,255,255,0.70) 18%,
       rgba(255,255,255,0.26) 42%,
       rgba(255,255,255,0.00) 62%);
     filter:blur(var(--soft));
-    transform:scale(0.02);
+    transform:scale(0.32);
     opacity:0;
     will-change:transform,opacity,filter;
   }
@@ -122,7 +122,7 @@
     --lineIn: 400ms;     /* 左右银线汇合 */
     --stemDur: 1ms;    /* 中心竖线扩展 */
     --guideFade: 350ms;  /* 十字引导线淡出 */
-    --ringDur: 320ms;    /* 每一圈绘制 */
+    --ringDur: 330ms;    /* 每一圈绘制 */
     --ringGap: 55ms;     /* 圈与圈之间停顿 */
     --traceFade: 700ms;  /* 整体淡出 */
     --ringStartOffset: 50ms; /* 等竖线扩展完成后再开始画第一圈（避免十字线留在LOGO里） */
@@ -148,9 +148,9 @@
     will-change:transform,opacity;
     background:linear-gradient(90deg,
       rgba(255,255,255,0) 0%,
-      rgba(230,236,245,0.55) 18%,
-      rgba(255,255,255,0.95) 50%,
-      rgba(196,205,218,0.55) 82%,
+      rgba(230,236,245,0.35) 18%,
+      rgba(255,255,255,0.75) 50%,
+      rgba(196,205,218,0.35) 82%,
       rgba(255,255,255,0) 100%);
     box-shadow:
       0 0 10px rgba(230,236,245,0.35),
@@ -1332,7 +1332,7 @@ main{ padding:0; }
 
 .page1TitleNote{
   margin-top: 10px;
-  font-size: 13px;
+  font-size: 16px;
   letter-spacing: 0.06em;
   color: rgba(120,120,120,0.85);
 }
@@ -1342,6 +1342,24 @@ main{ padding:0; }
 }
 
 .metaItem.span2{ grid-column:1 / -1; }
+
+.page2Title{
+  font-family: var(--font-zh-head);
+  font-size: clamp(26px, 2.6vw, 40px);
+  letter-spacing: 0.06em;
+  font-weight: 500;
+  color: rgba(57, 57, 57, 0.92);
+  text-shadow: 0 10px 26px rgba(0,0,0,0.05);  
+}
+
+.page2Sub
+{
+  font-family: var(--font-zh-head);
+  margin-top: 10px;
+  font-size: 15px;
+  letter-spacing: 0.06em;
+  color: rgba(120,120,120,0.85);
+}
 
 .ideaGrid{
   display:grid;
@@ -1578,7 +1596,7 @@ main{ padding:0; }
     <div class="page1TitleWrap">
       <div class="page1TitleZh">观见时刻</div>
       <div class="page1TitleEn">CRITICAL MOMENT</div>
-      <div class="page1TitleNote">（没想好写啥）</div>
+      <div class="page1TitleNote">上方黑色固定栏中心的LOGO竟然是镂空的，真是天才的设计啊！</div>
     </div>
     <div class="photoFrame">
       <div class="familyHero">
@@ -1596,8 +1614,8 @@ main{ padding:0; }
   <section class="page2" id="page2" aria-label="Critical moment products">
     <div class="page2Wrap">
       <p class="page2Eyebrow">Critical moment products</p>
-      <h2 class="page2Title">Critical moment products</h2>
-      <p class="page2Sub">Three essentials designed to feel clean, calm, and quietly precise—built for everyday use.</p>
+      <h2 class="page2Title">明星产品</h2>
+      <p class="page2Sub">接下来登场的是......｜｜我当招牌，真的假的？</p>
 
       <div class="productGrid">
         <article class="productCard">
@@ -1613,7 +1631,7 @@ main{ padding:0; }
           </div>
 
           <h3 class="productName">Antihair-loss shampoo</h3>
-          <p class="productNote">Reduces visible hair fall and supports the scalp.<br/>A soft cleanse for daily use.</p>
+          <p class="productNote">一切点击跳转图标都在施工中，点了什么都不会发生，会浪费你一秒</p>
           <a class="productBtn" href="antihairloss-shampoo.html">View product</a>
         </article>
 
@@ -1630,7 +1648,7 @@ main{ padding:0; }
           </div>
 
           <h3 class="productName">Acne Clearing Serum</h3>
-          <p class="productNote">Targets blemishes and congestion with precision.<br/>Balances without stripping.</p>
+          <p class="productNote">Targets blemishes and congestion with precision.<br/>点这个也会浪费你一秒</p>
           <a class="productBtn" href="acne-clearing-serum.html">View product</a>
         </article>
 
@@ -1647,7 +1665,7 @@ main{ padding:0; }
           </div>
 
           <h3 class="productName">Moisturizing cream</h3>
-          <p class="productNote">Deep hydration with a weightless finish.<br/>Comforts and smooths.</p>
+          <p class="productNote">Deep hydration with a weightless finish.<br/>哈哈，这个也是</p>
           <a class="productBtn" href="moisturizing-cream.html">View product</a>
         </article>
       </div>
@@ -1758,30 +1776,32 @@ main{ padding:0; }
 <section class="page6" id="page6" aria-label="Recommended reading">
   <div class="page6Wrap">
     <p class="secEyebrow">Recommended reading</p>
-    <h2 class="secTitle">Recommended reading</h2>
-    <p class="secSub">三个一排，半页大小即可；后续把标题与摘要替换为真实内容。</p>
+    <h2 class="secTitle">推荐阅读</h2>
+    <p class="secSub">这里也招租</p>
 
     <div class="readGrid">
       <article class="readCard">
-        <div class="readTag">Journal</div>
-        <h3 class="readTitle">Placeholder article title</h3>
-        <p class="readExcerpt">A short two-line excerpt goes here. Keep it calm and precise.</p>
+        <div class="readTag">尝试写俳句</div>
+        <h3 class="readTitle">打了半天副诶绯</h3>
+        <p class="readExcerpt">结果它读排</p>
+        <a class="readLink" href="library.html">Read</a>
+      </article>
+      
+      <article class="readCard">
+        <div class="readTag">标题写什么</div>
+        <h3 class="readTitle">化疗防脱洗发水</h3>
+        <p class="readExcerpt">用了都说好</p>
         <a class="readLink" href="library.html">Read</a>
       </article>
 
       <article class="readCard">
-        <div class="readTag">Note</div>
-        <h3 class="readTitle">Placeholder article title</h3>
-        <p class="readExcerpt">A short two-line excerpt goes here. Keep it calm and precise.</p>
+        <div class="readTag">蜂胶一百七</div>
+        <h3 class="readTitle">竟然忘记走托运</h3>
+        <p class="readExcerpt">海关抢劫啊</p>
         <a class="readLink" href="library.html">Read</a>
       </article>
 
-      <article class="readCard">
-        <div class="readTag">Guide</div>
-        <h3 class="readTitle">Placeholder article title</h3>
-        <p class="readExcerpt">A short two-line excerpt goes here. Keep it calm and precise.</p>
-        <a class="readLink" href="library.html">Read</a>
-      </article>
+
     </div>
   </div>
 </section>
@@ -1866,7 +1886,7 @@ main{ padding:0; }
   })();
 
   // 只要调这几个数字就能改节奏
-  const glowDur = 2300;     // 白光扩张
+  const glowDur = 2500;     // 白光扩张
   // 与CSS里 Intro trace 的变量保持一致：lineIn(380) + ringStartOffset(240) + ringDur(260)*4 + ringGap(90)*3 + traceFade(240)
   const traceTotalMs = 2170;
   const mistDur = 1550;     // 黑雾成标
@@ -1933,6 +1953,7 @@ main{ padding:0; }
     { key:"ring1",  label:"顶级功效产品",   pt:[ 0.02,  0.02], slope: -2 },
     { key:"ring2",  label:"解决关键难题",   pt:[ 0.03,  0.16], slope: 12 },
     { key:"ring3",  label:"高层精神需求",   pt:[ 0.02,  0.30], slope: 28 },
+    { key:"ring3",  label:"恭喜你发现本场的没用彩蛋", pt:[  0.03, 0.27],slope: 9},
   ];
 
   let bag = [];
